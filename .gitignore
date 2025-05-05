@@ -1,6 +1,7 @@
 # Dependencies
 node_modules/
 venv/
+venv_py310/
 
 # Next.js build output
 .next/
@@ -32,3 +33,11 @@ ehthumbs.db
 .env.development.local
 .env.test.local
 .env.production.local
+
+# Large binary files
+*.wasm
+*.so
+*.node
+
+# Webpack cache
+.cache/
