@@ -1,0 +1,95 @@
+# Default configuration for PR Summary & Code Review Assistant
+
+# API configuration
+api:
+  cors_origins: ["*"]  # In production, specify allowed origins
+
+# PR Analysis configuration
+pr_analysis:
+  strictness_level: 3  # 1-5 scale, where 5 is strictest
+  focus_areas: ["security", "performance", "code_quality", "test_coverage"]
+  analyze_dependencies: true
+  analyze_risks: true
+
+# Code Review configuration
+code_review:
+  issue_thresholds:
+    critical: "block"
+    high: "block"
+    medium: "warn"
+    low: "report"
+  skip_patterns:
+    - ".*\\.min\\.(js|css)$"
+    - "^dist/"
+    - "^build/"
+    - "^node_modules/"
+    - "^vendor/"
+    - "^\\.git/"
+    - "package-lock\\.json$"
+    - "yarn\\.lock$"
+
+# GitHub API configuration
+github:
+  timeout: 30  # Seconds
+  retries: 3
+
+# General settings
+strictness_level: 3  # 1-5 scale from lenient to strict review standards
+verbosity: "normal"  # "minimal", "normal", "detailed"
+
+# Focus areas
+focus_areas:
+  - security
+  - performance
+  - code_quality
+  - test_coverage
+
+# Issue thresholds determine how different severity levels are treated
+issue_thresholds:
+  critical: "block"  # Block merge until fixed
+  high: "block"      # Block merge until fixed
+  medium: "warn"     # Warning but allows merge
+  low: "report"      # Just report in summary
+
+# Language-specific rules
+language_rules:
+  javascript:
+    custom_patterns:
+      - pattern: "debugger;"
+        severity: "medium"
+        issue: "Debugger statement in code"
+        recommendation: "Remove debugger statements before committing"
+  
+  python:
+    custom_patterns:
+      - pattern: "import pdb"
+        severity: "medium"
+        issue: "Debug import in production code"
+        recommendation: "Remove debugging imports before committing"
+
+# Custom project-specific rules
+custom_rules:
+  - name: "api-version-check"
+    pattern: "API_VERSION = ['\"]v[0-9]+['\"]"
+    message: "API version change detected. Ensure backward compatibility is maintained."
+    severity: "high"
+    category: "code_quality"
+
+# File patterns to skip during analysis
+skip_patterns:
+  - "\.min\.(js|css)$"
+  - "^dist/"
+  - "^build/"
+  - "^node_modules/"
+  - "^vendor/"
+  - "^__pycache__/"
+  - "\.lock$"
+  - "\.ico$"
+  - "\.svg$"
+  - "\.png$"
+  - "\.jpg$"
+  - "\.jpeg$"
+  - "\.gif$"
+  - "\.pdf$"
+  - "\.ttf$"
+ 
