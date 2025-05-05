@@ -41,3 +41,6 @@ ehthumbs.db
 
 # Webpack cache
 .cache/
+
+# Ignore specific node_modules subdirectory
+node_modules/@next/swc-darwin-arm64/
