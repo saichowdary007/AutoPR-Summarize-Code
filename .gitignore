@@ -44,3 +44,9 @@ ehthumbs.db
 
 # Ignore specific node_modules subdirectory
 node_modules/@next/swc-darwin-arm64/
+
+# Ignore Next.js cache and build artifacts
+frontend/.next/cache/webpack/
+
+# Ignore Python virtual environment
+venv_py310/
