@@ -41,7 +41,7 @@ jobs:
         push: true
         tags: sai4712/pr-assistant-backend:latest
         cache-from: type=registry,ref=sai4712/pr-assistant-backend:latest
-        cache-to: type=inline
+        cache-to: type=inline,mode=max
     
     - name: Build and push frontend
       uses: docker/build-push-action@v4
@@ -51,7 +51,7 @@ jobs:
         push: true
         tags: sai4712/pr-assistant-frontend:latest
         cache-from: type=registry,ref=sai4712/pr-assistant-frontend:latest
-        cache-to: type=inline
+        cache-to: type=inline,mode=max
         # Add detailed output for debugging build issues
         build-args: |
           BUILDKIT_INLINE_CACHE=1 
