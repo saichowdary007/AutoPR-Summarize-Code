@@ -31,5 +31,6 @@ jobs:
       uses: docker/build-push-action@v4
       with:
         context: ./frontend
+        file: ./frontend/Dockerfile.ci
         push: true
         tags: sai4712/pr-assistant-frontend:latest 
