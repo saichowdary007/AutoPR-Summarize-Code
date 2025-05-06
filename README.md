@@ -186,3 +186,80 @@ See the [Configuration Guide](docs/configuration.md) for detailed options.
 ## License
 
 MIT 
+
+## Recent CI/CD Improvements
+
+The following improvements have been made to the CI/CD pipeline:
+
+### Pipeline Fixes
+1. **Docker Build Issues Resolved**:
+   - Fixed missing directories problems (`public` directory)
+   - Created comprehensive Dockerfile.ci for frontend
+   - Added necessary configuration files (next.config.js)
+   - Resolved cache-related issues
+
+2. **CI Pipeline Improvements**:
+   - Added Python formatting with black
+   - Improved pylint configuration
+   - Fixed logging formats (replaced f-strings with lazy % formatting)
+   - Added more specific exception handling
+   - Updated Node.js version to 18+
+
+3. **CD Pipeline Enhancements**:
+   - Updated to use modern Node.js (18.18.2)
+   - Improved caching configuration
+   - Added debugging output
+   - Fixed Docker Hub image tagging
+
+## Development Workflow
+
+### Local Development
+
+1. **Backend**:
+```bash
+cd backend
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+pip install -r requirements.txt
+python src/run.py
+```
+
+2. **Frontend**:
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+### CI/CD Pipeline
+
+The project uses GitHub Actions for CI/CD:
+
+- **CI Pipeline**: Runs tests, linting, and formatting checks
+- **CD Pipeline**: Builds and pushes Docker images to Docker Hub
+
+### Code Formatting
+
+1. **Backend**:
+```bash
+cd backend
+./format.sh  # Formats Python code with black
+```
+
+2. **Frontend**:
+```bash
+cd frontend
+npm run lint  # Checks and fixes code style
+```
+
+## Docker Deployment
+
+To run the application with Docker:
+
+```bash
+docker-compose up
+```
+
+This will start both the frontend and backend services. You can access the application at:
+- Frontend: http://localhost:3000
+- Backend API: http://localhost:8000/docs 

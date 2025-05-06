@@ -98,7 +98,8 @@ async def root():
 @app.post("/api/pr-summary", response_model=SummaryResponse)
 async def generate_pr_summary(request: PRRequest):
     try:
-        logger.info(f"Processing PR summary request for {request.repo_owner}/{request.repo_name}#{request.pr_number}")
+        logger.info("Processing PR summary request for %s/%s#%s", 
+                   request.repo_owner, request.repo_name, request.pr_number)
         
         github_service = GitHubService(
             token=request.github_token,
@@ -112,10 +113,14 @@ async def generate_pr_summary(request: PRRequest):
             config=request.config
         )
         
-        logger.info(f"Successfully generated PR summary for {request.repo_owner}/{request.repo_name}#{request.pr_number}")
+        logger.info("Successfully generated PR summary for %s/%s#%s", 
+                   request.repo_owner, request.repo_name, request.pr_number)
         return summary
+    except (ValueError, KeyError) as e:
+        logger.error("Error generating PR summary: %s", str(e))
+        raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
-        logger.error(f"Error generating PR summary: {str(e)}")
+        logger.error("Unexpected error generating PR summary: %s", str(e))
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/api/code-review", response_model=CodeReviewResponse)
@@ -124,7 +129,8 @@ async def perform_code_review(
     background_tasks: BackgroundTasks
 ):
     try:
-        logger.info(f"Processing code review request for {request.repo_owner}/{request.repo_name}#{request.pr_number}")
+        logger.info("Processing code review request for %s/%s#%s", 
+                   request.repo_owner, request.repo_name, request.pr_number)
         
         github_service = GitHubService(
             token=request.github_token,
@@ -146,10 +152,14 @@ async def perform_code_review(
                 review_results=review_results
             )
         
-        logger.info(f"Successfully completed code review for {request.repo_owner}/{request.repo_name}#{request.pr_number}")
+        logger.info("Successfully completed code review for %s/%s#%s", 
+                   request.repo_owner, request.repo_name, request.pr_number)
         return review_results
+    except (ValueError, KeyError) as e:
+        logger.error("Error performing code review: %s", str(e))
+        raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
-        logger.error(f"Error performing code review: {str(e)}")
+        logger.error("Unexpected error performing code review: %s", str(e))
         raise HTTPException(status_code=500, detail=str(e))
 
 # Startup event

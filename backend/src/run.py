@@ -20,7 +20,7 @@ if __name__ == "__main__":
     port = int(os.getenv("PORT", "8000"))
     reload = os.getenv("RELOAD", "True").lower() in ["true", "1", "yes"]
     
-    logger.info(f"Starting PR Summary & Code Review Assistant API on {host}:{port}")
+    logger.info("Starting PR Summary & Code Review Assistant API on %s:%s", host, port)
     
     try:
         # Run the application with uvicorn
@@ -30,8 +30,8 @@ if __name__ == "__main__":
             port=port,
             reload=reload
         )
-    except Exception as e:
-        logger.error(f"Error running server with uvicorn: {e}")
+    except (ImportError, ModuleNotFoundError) as e:
+        logger.error("Error running server with uvicorn: %s", e)
         
         # Fallback to importing the app directly and running with a simple HTTP server
         logger.info("Trying alternative method...")
@@ -43,6 +43,6 @@ if __name__ == "__main__":
             config = uvicorn.Config(app, host=host, port=port)
             server = uvicorn.Server(config)
             server.run()
-        except Exception as e2:
-            logger.error(f"Alternative method also failed: {e2}")
+        except (ImportError, ValueError, RuntimeError) as e2:
+            logger.error("Alternative method also failed: %s", e2)
             sys.exit(1) 
