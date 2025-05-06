@@ -63,6 +63,7 @@ This application helps developers and reviewers by:
 - Python 3.8+
 - Node.js 14+
 - GitHub access token (for API integration)
+- Docker & Docker Compose (for containerized deployment)
 
 ### Quick Setup (Recommended)
 
@@ -71,11 +72,15 @@ This application helps developers and reviewers by:
 git clone https://github.com/yourusername/pr-summary-review-assistant.git
 cd pr-summary-review-assistant
 
-# Run the setup script
-./setup.sh
+# Run the enhanced setup script
+./enhanced_setup.sh
 
 # Start the development servers
+# Traditional method:
 ./start.sh
+
+# Or using Docker:
+./docker-start.sh
 ```
 
 ### Manual Setup
@@ -116,6 +121,50 @@ cp .env.example .env.local
 # Run development server
 npm run dev
 ```
+
+## CI/CD Pipeline
+
+This project includes a complete CI/CD pipeline using GitHub Actions:
+
+- **Continuous Integration**: Automated testing, linting, and code quality checks
+- **Continuous Deployment**: Automated Docker image building and deployment
+
+### Pipeline Workflows
+
+- `ci.yml`: Runs on every pull request to ensure code quality
+- `cd.yml`: Runs on merges to the main branch to deploy changes
+
+## Docker Deployment
+
+The application can be run using Docker:
+
+```bash
+# Build and start the application
+docker-compose up -d
+
+# View logs
+docker-compose logs -f
+
+# Stop the application
+docker-compose down
+```
+
+## API Security
+
+The backend API includes several security features:
+
+- **Rate Limiting**: Prevents abuse by limiting requests per client
+- **JWT Authentication**: Secures API endpoints requiring authentication
+- **CORS Protection**: Controls which domains can access the API
+- **Request Logging**: Tracks all API requests for auditing
+
+## Monitoring
+
+The application includes health check endpoints for monitoring:
+
+- `/health`: Returns detailed service metrics
+- `/readiness`: Kubernetes readiness probe endpoint
+- `/liveness`: Kubernetes liveness probe endpoint
 
 ## Usage
 

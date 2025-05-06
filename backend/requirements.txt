@@ -9,4 +9,8 @@ pytest==7.4.3
 pylint==3.0.2
 black==23.11.0
 pyyaml==6.0.1
-python-multipart==0.0.6 
+python-multipart==0.0.6
+psutil==5.9.5
+PyJWT==2.8.0
+prometheus-client==0.17.1
+fastapi-limiter==0.1.5 

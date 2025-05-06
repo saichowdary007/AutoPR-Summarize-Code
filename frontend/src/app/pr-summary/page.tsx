@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react';
 import { useState } from 'react';
 import { FaCheckCircle, FaExclamationTriangle } from 'react-icons/fa';
 import RepositoryForm from '@/components/RepositoryForm';
@@ -76,7 +77,9 @@ export default function PRSummaryPage() {
           
           <div className="card p-6">
             <h3 className="text-xl font-semibold mb-3">Overview</h3>
-            <p className="text-gray-700">{summary.overview}</p>
+            <div className="text-gray-700 whitespace-pre-line bg-gray-50 p-4 rounded-md border border-gray-100 leading-relaxed">
+              {summary.overview}
+            </div>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -107,7 +110,9 @@ export default function PRSummaryPage() {
           {summary.testing && (
             <div className="card p-6">
               <h3 className="text-xl font-semibold mb-3">Testing</h3>
-              <p className="text-gray-700">{summary.testing}</p>
+              <div className="text-gray-700 whitespace-pre-line bg-gray-50 p-4 rounded-md border border-gray-100 leading-relaxed">
+                {summary.testing}
+              </div>
             </div>
           )}
           
