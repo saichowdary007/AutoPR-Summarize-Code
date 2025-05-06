@@ -25,11 +25,11 @@ jobs:
       with:
         context: ./backend
         push: true
-        tags: yourusername/pr-assistant-backend:latest
+        tags: sai4712/pr-assistant-backend:latest
         
     - name: Build and push frontend
       uses: docker/build-push-action@v4
       with:
         context: ./frontend
         push: true
-        tags: yourusername/pr-assistant-frontend:latest 
+        tags: sai4712/pr-assistant-frontend:latest 
