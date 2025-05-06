@@ -42,12 +42,21 @@ app.add_middleware(
 app.add_middleware(LoggingMiddleware)
 app.add_middleware(RateLimiter, max_requests=100, window_seconds=60)
 app.add_middleware(
-    AuthMiddleware, 
-    exclude_paths=["/docs", "/redoc", "/openapi.json", "/health", "/readiness", "/liveness", "/"]
+    AuthMiddleware,
+    exclude_paths=[
+        "/docs",
+        "/redoc",
+        "/openapi.json",
+        "/health",
+        "/readiness",
+        "/liveness",
+        "/",
+    ],
 )
 
 # Include health routes
 app.include_router(health.router, tags=["Health"])
+
 
 # Models
 class PRRequest(BaseModel):
@@ -57,6 +66,7 @@ class PRRequest(BaseModel):
     github_token: str
     config: Optional[Dict[str, Any]] = None
 
+
 class CodeReviewRequest(BaseModel):
     repo_owner: str
     repo_name: str
@@ -64,6 +74,7 @@ class CodeReviewRequest(BaseModel):
     github_token: str
     config: Optional[Dict[str, Any]] = None
     post_comments: bool = False
+
 
 class SummaryResponse(BaseModel):
     title: str
@@ -75,6 +86,7 @@ class SummaryResponse(BaseModel):
     migration_notes: Optional[str] = None
     potential_risks: Optional[List[str]] = None
 
+
 class CodeReviewIssue(BaseModel):
     file: str
     line: int
@@ -84,6 +96,7 @@ class CodeReviewIssue(BaseModel):
     example: Optional[str] = None
     reference: Optional[str] = None
 
+
 class CodeReviewResponse(BaseModel):
     security_issues: List[CodeReviewIssue] = []
     performance_issues: List[CodeReviewIssue] = []
@@ -91,30 +104,40 @@ class CodeReviewResponse(BaseModel):
     test_coverage_issues: List[CodeReviewIssue] = []
     statistics: Dict[str, Any] = {}
 
+
 @app.get("/")
 async def root():
     return {"message": "PR Summary & Code Review Assistant API"}
 
+
 @app.post("/api/pr-summary", response_model=SummaryResponse)
 async def generate_pr_summary(request: PRRequest):
     try:
-        logger.info("Processing PR summary request for %s/%s#%s", 
-                   request.repo_owner, request.repo_name, request.pr_number)
-        
+        logger.info(
+            "Processing PR summary request for %s/%s#%s",
+            request.repo_owner,
+            request.repo_name,
+            request.pr_number,
+        )
+
         github_service = GitHubService(
             token=request.github_token,
             repo_owner=request.repo_owner,
-            repo_name=request.repo_name
+            repo_name=request.repo_name,
         )
-        
+
         summary = await analyze_pull_request(
             github_service=github_service,
             pr_number=request.pr_number,
-            config=request.config
+            config=request.config,
         )
-        
-        logger.info("Successfully generated PR summary for %s/%s#%s", 
-                   request.repo_owner, request.repo_name, request.pr_number)
+
+        logger.info(
+            "Successfully generated PR summary for %s/%s#%s",
+            request.repo_owner,
+            request.repo_name,
+            request.pr_number,
+        )
         return summary
     except (ValueError, KeyError) as e:
         logger.error("Error generating PR summary: %s", str(e))
@@ -123,37 +146,45 @@ async def generate_pr_summary(request: PRRequest):
         logger.error("Unexpected error generating PR summary: %s", str(e))
         raise HTTPException(status_code=500, detail=str(e))
 
+
 @app.post("/api/code-review", response_model=CodeReviewResponse)
 async def perform_code_review(
-    request: CodeReviewRequest,
-    background_tasks: BackgroundTasks
+    request: CodeReviewRequest, background_tasks: BackgroundTasks
 ):
     try:
-        logger.info("Processing code review request for %s/%s#%s", 
-                   request.repo_owner, request.repo_name, request.pr_number)
-        
+        logger.info(
+            "Processing code review request for %s/%s#%s",
+            request.repo_owner,
+            request.repo_name,
+            request.pr_number,
+        )
+
         github_service = GitHubService(
             token=request.github_token,
             repo_owner=request.repo_owner,
-            repo_name=request.repo_name
+            repo_name=request.repo_name,
         )
-        
+
         review_results = await review_code(
             github_service=github_service,
             pr_number=request.pr_number,
-            config=request.config
+            config=request.config,
         )
-        
+
         # Optionally post comments to GitHub PR
         if request.post_comments:
             background_tasks.add_task(
                 github_service.post_review_comments,
                 pr_number=request.pr_number,
-                review_results=review_results
+                review_results=review_results,
             )
-        
-        logger.info("Successfully completed code review for %s/%s#%s", 
-                   request.repo_owner, request.repo_name, request.pr_number)
+
+        logger.info(
+            "Successfully completed code review for %s/%s#%s",
+            request.repo_owner,
+            request.repo_name,
+            request.pr_number,
+        )
         return review_results
     except (ValueError, KeyError) as e:
         logger.error("Error performing code review: %s", str(e))
@@ -162,19 +193,23 @@ async def perform_code_review(
         logger.error("Unexpected error performing code review: %s", str(e))
         raise HTTPException(status_code=500, detail=str(e))
 
+
 # Startup event
 @app.on_event("startup")
 async def startup_event():
     logger.info("Application starting up...")
+
 
 # Shutdown event
 @app.on_event("shutdown")
 async def shutdown_event():
     logger.info("Application shutting down...")
 
+
 if __name__ == "__main__":
     import uvicorn
+
     port = int(os.getenv("PORT", 8000))
     host = os.getenv("HOST", "0.0.0.0")
     reload = os.getenv("RELOAD", "True").lower() == "true"
-    uvicorn.run("main:app", host=host, port=port, reload=reload) 
+    uvicorn.run("main:app", host=host, port=port, reload=reload)

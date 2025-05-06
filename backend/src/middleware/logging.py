@@ -12,17 +12,18 @@ logging.basicConfig(
 )
 logger = logging.getLogger("api")
 
+
 class LoggingMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
         start_time = time.time()
-        
+
         # Log request
         logger.info(f"Request: {request.method} {request.url.path}")
-        
+
         # Process request
         try:
             response = await call_next(request)
-            
+
             # Log response
             process_time = time.time() - start_time
             logger.info(
@@ -30,7 +31,7 @@ class LoggingMiddleware(BaseHTTPMiddleware):
                 f"Status: {response.status_code} - "
                 f"Duration: {process_time:.4f}s"
             )
-            
+
             return response
         except Exception as e:
             # Log exceptions
@@ -40,4 +41,4 @@ class LoggingMiddleware(BaseHTTPMiddleware):
                 f"Exception: {str(e)} - "
                 f"Duration: {process_time:.4f}s"
             )
-            raise 
+            raise
