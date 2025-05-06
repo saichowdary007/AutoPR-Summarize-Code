@@ -1,0 +1,94 @@
+[MASTER]
+# A comma-separated list of file extensions that should be checked
+extension=py
+
+# Specify a configuration file
+#rcfile=
+
+# Python code to execute, usually for sys.path manipulation such as
+# pygtk.require().
+init-hook='import sys; import os; sys.path.append(os.path.abspath("."))'
+
+# Add files or directories to the blacklist. They should be base names, not
+# paths.
+ignore=CVS
+
+# Pickle collected data for later comparisons
+persistent=yes
+
+# Use multiple processes to speed up pylint.
+jobs=4
+
+# Allow loading of arbitrary C extensions
+unsafe-load-any-extension=no
+
+# A comma-separated list of packages or directories that should be treated as
+# importing all names as if they were of type `from [package] import *`.
+allow-wildcard-with-all=no
+
+# Minimum supported python version
+py-version = 3.8
+
+[MESSAGES CONTROL]
+# Disable some unwanted warnings
+disable=
+    missing-function-docstring,
+    missing-module-docstring,
+    missing-class-docstring,
+    raw-checker-failed,
+    bad-inline-option,
+    locally-disabled,
+    file-ignored,
+    suppressed-message,
+    useless-suppression,
+    deprecated-pragma,
+    use-symbolic-message-instead,
+    wrong-import-order,
+    wrong-import-position,
+    logging-fstring-interpolation,
+    broad-exception-caught,
+    invalid-name,
+    unnecessary-lambda,
+    fixme,
+    too-many-arguments,
+    too-many-locals,
+    too-many-branches,
+    too-many-statements,
+    too-many-instance-attributes,
+    too-few-public-methods,
+    line-too-long,
+    import-error
+
+[FORMAT]
+# Maximum number of characters on a single line.
+max-line-length=100
+
+[VARIABLES]
+# Tells whether unused global variables should be treated as a violation.
+allow-global-unused-variables=yes
+
+[DESIGN]
+# Maximum number of arguments for function / method
+max-args=10
+
+# Maximum number of locals for function / method body
+max-locals=25
+
+# Maximum number of statements in function / method body
+max-statements=100
+
+[IMPORTS]
+# Force import order to recognize a module as part of the standard
+# compatibility libraries.
+known-standard-library=
+
+# Force import order to recognize a module as part of a third party library.
+known-third-party=enchant
+
+[CLASSES]
+# List of member names that should be excluded from the protected access check.
+exclude-protected=_asdict,_fields,_replace,_source,_make
+
+[EXCEPTIONS]
+# Exceptions that will emit a warning when being caught.
+overgeneral-exceptions=Exception 
