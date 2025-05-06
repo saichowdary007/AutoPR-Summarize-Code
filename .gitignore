@@ -36,17 +36,15 @@ ehthumbs.db
 
 # Large binary files
 *.wasm
-*.so
 *.node
 
 # Webpack cache
 .cache/
 
-# Ignore specific node_modules subdirectory
+# Ignore specific binaries, cache, and environments
 node_modules/@next/swc-darwin-arm64/
-
-# Ignore Next.js cache and build artifacts
-frontend/.next/cache/webpack/
-
-# Ignore Python virtual environment
-venv_py310/
+frontend/.next/
+backend/venv/
+backend/venv_py310/
+*.so
+*.pack
