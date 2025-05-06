@@ -1,21 +1,36 @@
-FROM node:18-alpine
+FROM node:18-alpine AS builder
 
 WORKDIR /app
 
-# Install dependencies with npm install instead of npm ci
+# Copy package files and install dependencies
 COPY package*.json ./
-RUN npm install
+RUN npm install --quiet --no-progress
 
-# Create necessary directories
-RUN mkdir -p public .next
+# Ensure required directories exist
+RUN mkdir -p public .next src
 
-# Copy project files
+# Copy remaining files
 COPY . .
+
+# Verify directory structure
+RUN ls -la && echo "Content of public directory:" && ls -la public || echo "Public directory is empty"
 
 # Build the application
 RUN npm run build
 
-# Expose the frontend port
+# Production stage
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Copy only necessary files from builder
+COPY --from=builder /app/package*.json ./
+COPY --from=builder /app/next.config.js ./next.config.js
+COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/node_modules ./node_modules
+
+# The application's default port
 EXPOSE 3000
 
 # Run the application

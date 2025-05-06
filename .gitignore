@@ -1,10 +1,11 @@
-# Dependenci
+# Dependencies
 node_modules/
 venv/
 venv_py310/
 
-# Next.js build output
-.next/
+# Next.js build output (but not for CI)
+# Comment this out for now to ensure build files are pushed
+# .next/
 out/
 
 # Python cache
@@ -36,15 +37,15 @@ ehthumbs.db
 
 # Large binary files
 *.wasm
-*.node
+*.so
 
 # Webpack cache
 .cache/
 
-# Ignore specific binaries, cache, and environments
-node_modules/@next/swc-darwin-arm64/
-frontend/.next/
-backend/venv/
-backend/venv_py310/
-*.so
-*.pack
+# Ignore specific large files only (not entire directories)
+# node_modules/@next/swc-darwin-arm64/
+# frontend/.next/cache/webpack/**/*.pack
+
+# Keep all public directories and their contents
+!public/
+!*/public/
