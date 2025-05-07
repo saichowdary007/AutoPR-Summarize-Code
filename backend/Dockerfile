@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -y gcc python3-dev && rm -rf /var/lib/apt/
 WORKDIR /usr/src/app
 
 # Install dependencies first to leverage Docker cache
-COPY requirements.txt ./
+COPY ./requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy project files
